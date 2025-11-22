@@ -1,0 +1,319 @@
+/* Login Component Styles */
+
+.auth-login {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.auth-login::before {
+    content: "";
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: backgroundMove 20s linear infinite;
+    opacity: 0.3;
+}
+
+@keyframes backgroundMove {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    100% {
+        transform: translate(50px, 50px);
+    }
+}
+
+.auth-login-content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 480px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
+    padding: 48px 40px;
+    margin: 20px;
+    /* backdrop-filter: blur(10px); */
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Titles */
+.auth-login-content .txt-title {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 8px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    letter-spacing: -0.5px;
+}
+
+.auth-login-content .txt-subtitle {
+    text-align: center;
+    font-size: 14px;
+    color: #718096;
+    margin-bottom: 32px;
+}
+
+/* Form */
+.auth-login-content .ant-form-item-label>label {
+    font-weight: 500;
+    color: #2d3748;
+    font-size: 14px;
+}
+
+.auth-login-content .ant-input,
+.auth-login-content .ant-input-password {
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.auth-login-content .ant-input:hover,
+.auth-login-content .ant-input-password:hover {
+    border-color: #cbd5e0;
+}
+
+.auth-login-content .ant-input:focus,
+.auth-login-content .ant-input-focused,
+.auth-login-content .ant-input-password:focus,
+.auth-login-content .ant-input-password.ant-input-focused {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.auth-login-content .ant-input-affix-wrapper {
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    padding: 8px 11px;
+}
+
+.auth-login-content .ant-input-affix-wrapper:hover {
+    border-color: #cbd5e0;
+}
+
+.auth-login-content .ant-input-affix-wrapper:focus,
+.auth-login-content .ant-input-affix-wrapper-focused {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.auth-login-content .ant-input-affix-wrapper .ant-input {
+    border: none;
+    box-shadow: none;
+    padding: 0;
+}
+
+.auth-login-content .icon-input {
+    color: #a0aec0;
+    font-size: 16px;
+    margin-right: 8px;
+}
+
+/* Login actions */
+.auth-login-content .login-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.auth-login-content .login-actions .ant-checkbox-wrapper {
+    color: #4a5568;
+    font-size: 14px;
+}
+
+.auth-login-content .login-actions .ant-checkbox-checked .ant-checkbox-inner {
+    background-color: #667eea;
+    border-color: #667eea;
+}
+
+.auth-login-content .login-actions .forgot-link {
+    color: #667eea;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.auth-login-content .login-actions .forgot-link::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background-color: #667eea;
+    transition: width 0.3s ease;
+}
+
+.auth-login-content .login-actions .forgot-link:hover {
+    color: #5568d3;
+}
+
+.auth-login-content .login-actions .forgot-link:hover::after {
+    width: 100%;
+}
+
+/* Primary button */
+.auth-login-content .ant-btn-primary {
+    height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.auth-login-content .ant-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+    background: linear-gradient(135deg, #5568d3 0%, #6b4190 100%);
+}
+
+.auth-login-content .ant-btn-primary:active {
+    transform: translateY(0);
+}
+
+/* Divider */
+.auth-login-content .or-divider {
+    text-align: center;
+    color: #a0aec0;
+    margin: 28px 0;
+    font-size: 14px;
+    font-weight: 500;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-login-content .or-divider::before,
+.auth-login-content .or-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #e2e8f0, transparent);
+}
+
+.auth-login-content .or-divider::before {
+    margin-right: 16px;
+}
+
+.auth-login-content .or-divider::after {
+    margin-left: 16px;
+}
+
+/* Google button */
+.auth-login-content .google-btn {
+    height: 48px;
+    border-radius: 12px;
+    border: 2px solid #e2e8f0;
+    background: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    color: #4a5568;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-login-content .google-btn .anticon {
+    font-size: 20px;
+    margin-right: 10px;
+    color: #ea4335;
+}
+
+.auth-login-content .google-btn:hover {
+    border-color: #667eea;
+    color: #667eea;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.auth-login-content .google-btn:active {
+    transform: translateY(0);
+}
+
+/* Footer */
+.auth-login-content .auth-footer {
+    text-align: center;
+    margin-top: 28px;
+    font-size: 14px;
+    color: #718096;
+}
+
+.auth-login-content .auth-footer a {
+    color: #667eea;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.auth-login-content .auth-footer a:hover {
+    color: #5568d3;
+    text-decoration: underline;
+}
+
+/* Loading overlay */
+.auth-login .loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    z-index: 10;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .auth-login {
+        padding: 20px;
+    }
+
+    .auth-login-content {
+        padding: 32px 24px;
+        margin: 0;
+    }
+
+    .auth-login-content .txt-title {
+        font-size: 28px;
+    }
+
+    .auth-login-content .ant-btn-primary,
+    .auth-login-content .google-btn {
+        height: 44px;
+    }
+}
