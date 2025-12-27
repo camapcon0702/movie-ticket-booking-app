@@ -9,7 +9,7 @@
     width: 100vw;
     height: 100vh;
     /* position: relative; */
-    background-image: url('/images/background.jpg');
+    /* background-image: url('/images/background.jpg'); */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -76,7 +76,7 @@
     cursor: pointer;
     padding: 6px 10px;
     border-radius: 8px;
-    transition: background 0.16s ease;
+    /* transition: background 0.16s ease; */
 }
 
 .header-boards .header-nav .from-auth .text-auth-name {
