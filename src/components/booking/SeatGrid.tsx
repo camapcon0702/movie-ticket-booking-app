@@ -1,65 +1,71 @@
-
-import { SeatItem } from "./SeatItem";
-import type { SeatStatus } from "../../types/seat";
 import React from "react";
+import { SeatItem } from "./SeatItem";
+import type { Seat, SeatStatus } from "../../types/Seat";
+
 interface Props {
-  rows: string[];
-  seatsPerRow: number;
-  getSeatStatus: (id: string) => SeatStatus;
-  onSeatClick: (id: string) => void;
+  seats: Seat[];
+  selectedSeats: Seat[];
+  bookedSeats: Seat[]; 
+  onSeatClick: (seat: Seat) => void;
 }
 
 const SeatGrid = ({
-  rows,
-  seatsPerRow,
-  getSeatStatus,
+  seats,
+  selectedSeats,
+  bookedSeats,
   onSeatClick,
 }: Props) => {
+ 
+  const groupSeats = seats.reduce((acc, seat) => {
+    if (!acc[seat.rowName]) {
+      acc[seat.rowName] = [];
+    }
+    acc[seat.rowName].push(seat);
+    return acc;
+  }, {} as Record<string, Seat[]>);
+
+  const getSeatStatus = (seat: Seat): SeatStatus => {
+    if (selectedSeats.some(s => s.id === seat.id)) return "selected";
+    if (bookedSeats.includes(seat)) return "booked";
+    if (seat.seatType === "Vip") return "vip";
+    return "available";
+  };
+
   return (
-    <div className="space-y-4 mb-8">
-      {rows.map((row) => (
-        <div key={row} className="flex items-center justify-center gap-3">
-          {/* Row Label Left */}
-          <span className="text-gray-400 font-semibold w-6 text-center">
-            {row}
-          </span>
+    <div className="flex flex-col gap-3">
+      {Object.entries(groupSeats).map(([rowName, rowSeats]) => {
+        const sortedSeats = [...rowSeats].sort(
+          (a, b) => a.seatNumber - b.seatNumber
+        );
 
-          {/* Seats */}
-          <div className="flex gap-2">
-            {Array.from({ length: seatsPerRow }, (_, i) => {
-              const seatNumber = i + 1;
-              const id = `${row}${seatNumber}`;
-              const status = getSeatStatus(id);
+        return (
+          <div key={rowName} className="flex items-center gap-2">
+            <div className="w-8 text-center font-semibold text-gray-600">
+              {rowName}
+            </div>
 
-              // Add spacing in middle (aisle)
-              if (seatNumber === 9) {
+            <div className="flex gap-2">
+              {sortedSeats.map(seat => {
+                const isAisle = seat.seatNumber === 9; 
+
                 return (
-                  <React.Fragment key={id}>
-                    <div className="w-8" />
+                  <React.Fragment key={seat.id}>
+                    {isAisle && <div className="w-4" />}
                     <SeatItem
-                      status={status}
-                      onClick={() => onSeatClick(id)}
+                      status={getSeatStatus(seat)}
+                      onClick={() => onSeatClick(seat)}
                     />
                   </React.Fragment>
                 );
-              }
+              })}
+            </div>
 
-              return (
-                <SeatItem
-                  key={id}
-                  status={status}
-                  onClick={() => onSeatClick(id)}
-                />
-              );
-            })}
+            <div className="w-8 text-center font-semibold text-gray-600">
+              {rowName}
+            </div>
           </div>
-
-          {/* Row Label Right */}
-          <span className="text-gray-400 font-semibold w-6 text-center">
-            {row}
-          </span>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };

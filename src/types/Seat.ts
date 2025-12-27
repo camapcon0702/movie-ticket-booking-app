@@ -1,7 +1,10 @@
-export type SeatStatus = 'available' | 'selected' | 'booked' | 'vip';
+export type SeatStatus = 'available' | 'selected' | 'booked' | 'vip' |  "unavailable" | "occupied" | "regular";
 export interface Seat {
     id: string;
-    rowChart: string;
+    rowName: string;
     seatNumber: number;
-    status: SeatStatus;
+    isBooked: Boolean;
+    price: number;
+    seatType:string;
+    available: Boolean;
 }

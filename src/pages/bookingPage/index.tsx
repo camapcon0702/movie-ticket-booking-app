@@ -1,30 +1,79 @@
 import React from "react";
+import { useEffect, useState } from 'react';
 import { SeatGrid } from "../../components/booking/SeatGrid";
-import useSeatSelection from "../../hooks/booking/useSeatSelection";
-import { ChevronRight } from "lucide-react";
-
-const rows = ['A', 'B', 'C', 'D', 'E', 'F'];
-const seatsPerRow = 16;
-const bookedSeats = ['C7', 'D5', 'D6', 'F5', 'F6', 'F7'];
-
+import {useSeatSelection, useRenderSeat, formatVND } from "../../hooks/booking/useSeatSelection";
+import { ChevronRight, Film } from "lucide-react";
+import {fetchSeatsByShowtimeId} from "../../services/showtime";
+import { useParams } from "react-router-dom";
+import { createBooking } from "../../services/booking";
+const seatsPerRow = 4;
 const BookingPage = () => {
-  const { selectedSeats, toggleSeat } = useSeatSelection(bookedSeats);
+  const { id } = useParams<{ id: string }>();
+  const showtimeId = id ? Number(id) : null;
+  const [seatData, setSeatData] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const {  bookedSeats } = useRenderSeat(seatData);
+  const {selectedSeats, toggleSeat, totalPrice, selectedSeatLabels } = useSeatSelection();
+  
+  const handleCheckout = () => {
+    try {
+      createBooking({
+        showtimeId: showtimeId!,
+        seatId: selectedSeats.map(seat => seat.id),
+        orders: [],
+      });
+    } catch (err) { }
+  }
 
-  const getSeatStatus = (id: string) => {
-    if (selectedSeats.includes(id)) return "selected";
-    if (bookedSeats.includes(id)) return "booked";
-    return "available";
-  };
+  useEffect(() => {
+    if(!showtimeId) {
+      setError('Không tìm thấy ID suất chiếu');
+      setLoading(false);
+      return;
+    }
+    const loadSeats = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await fetchSeatsByShowtimeId(showtimeId);
+        setSeatData(data);
+      } catch (err: any) {
+        setError(err.message || 'Không tải được thông tin chỗ ngồi');
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadSeats();
+  }, [showtimeId]);
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-black">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-16 h-16 border-4 border-pink-500 border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-white text-lg font-medium">Đang tải...</p>
+        </div>
+      </div>
+    );
+  }
 
+  if (error || !seatData) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-black px-4">
+        <div className="text-center">
+          <Film className="w-20 h-20 text-red-500 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-white mb-2">Oops!</h2>
+          <p className="text-red-400 text-lg">{error || 'Không tìm thấy phim'}</p>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen bg-gray-900 text-white p-8">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-12 gap-8">
-          
           <div className="col-span-3">
-           
           </div>
-
           <div className="col-span-9">
             
             <div className="text-center mb-12">
@@ -58,9 +107,9 @@ const BookingPage = () => {
               </div>
             </div>
             <SeatGrid
-              rows={rows}
-              seatsPerRow={seatsPerRow}
-              getSeatStatus={getSeatStatus}
+              seats={seatData}
+              selectedSeats={selectedSeats}
+              bookedSeats={bookedSeats}
               onSeatClick={toggleSeat}
             />
             <div className="flex items-center justify-center gap-3 mb-8">
@@ -91,6 +140,10 @@ const BookingPage = () => {
                 <div className="w-6 h-6 rounded-lg bg-gray-700/60 border-2 border-gray-600" />
                 <span className="text-sm text-gray-400">Available</span>
               </div>
+               <div className="flex items-center gap-2">
+                <div className="w-6 h-6 rounded-lg bg-yellow-400 border-2 border-yellow-300" />
+                <span className="text-sm text-gray-400">Vip</span>
+              </div>
               <div className="flex items-center gap-2">
                 <div className="w-6 h-6 rounded-lg bg-pink-500 border-2 border-pink-400" />
                 <span className="text-sm text-gray-400">Selected</span>
@@ -108,7 +161,7 @@ const BookingPage = () => {
             </div>
 
             <div className="flex justify-center">
-              <button 
+              <button onClick={() => handleCheckout()}
                 disabled={selectedSeats.length === 0}
                 className="group flex items-center gap-3 px-10 py-4 bg-pink-500 rounded-full hover:opacity-90 transition font-bold text-lg shadow-lg shadow-pink-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
               >
@@ -119,11 +172,14 @@ const BookingPage = () => {
 
             {selectedSeats.length > 0 && (
               <div className="mt-6 text-center">
-                <p className="text-gray-400">
-                  Selected Seats: <span className="text-pink-500 font-semibold">{selectedSeats.join(', ')}</span>
-                </p>
+               <p className="text-gray-400">
+                Selected Seats:{" "}
+                <span className="text-pink-500 font-semibold">
+                 {selectedSeatLabels.join(', ')}
+                </span>
+              </p>
                 <p className="text-gray-400 mt-1">
-                  Total: <span className="text-white font-bold">{selectedSeats.length} seat(s)</span>
+                  Total: <span className="text-white font-bold">{selectedSeats.length} seat(s) : {formatVND(totalPrice)} </span>
                 </p>
               </div>
             )}
