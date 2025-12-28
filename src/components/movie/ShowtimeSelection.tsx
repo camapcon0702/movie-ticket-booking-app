@@ -3,17 +3,30 @@ import { Calendar, Clock, ChevronRight, Ticket } from "lucide-react";
 import { fetchShowtimeByMovieId } from "../../services/showtime";
 import type { Showtime } from "../../types/Showtime";
 import useShowtimesByDate from "../../hooks/showtime/useShowtimesByDate";
-
+import { useNavigate } from 'react-router-dom';
 interface ShowtimeSelectionProps {
   movieId: number;
+  movieName:string;
+  movieTime:number
 }
-
-const ShowtimeSelection = ({ movieId }: ShowtimeSelectionProps) => {
+const ShowtimeSelection = ({ movieId,movieName,movieTime}: ShowtimeSelectionProps) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showtimes, setShowtimes] = useState<Showtime[]>([]);
   const [selectedTime, setSelectedTime] = useState<string>("");
-
+  const [showtimeSelect, setShowtimeSelect] = useState<Showtime>();
+  const navigate = useNavigate(); 
+  const handSelectShowtime =(st:Showtime) =>
+  {
+    setShowtimeSelect(st);
+  }
+  const goToBooking =()=>{
+     if (!showtimeSelect) return;
+     console.log(movieTime)
+      localStorage.setItem('Booking', JSON.stringify({ movieName:movieName, showTime:showtimeSelect, movieTime:movieTime})
+    );
+      navigate(`/booking/${showtimeSelect.id}`);
+  }
   useEffect(() => {
     if (!movieId) {
       setError("Không tìm thấy ID phim");
@@ -44,7 +57,6 @@ const ShowtimeSelection = ({ movieId }: ShowtimeSelectionProps) => {
     hasData,
   } = useShowtimesByDate(showtimes);
 
-  /* -------------------- LOADING -------------------- */
   if (loading) {
     return (
       <div className="min-h-[300px] flex flex-col items-center justify-center">
@@ -57,7 +69,6 @@ const ShowtimeSelection = ({ movieId }: ShowtimeSelectionProps) => {
     );
   }
 
-  /* -------------------- ERROR -------------------- */
   if (error) {
     return (
       <div className="min-h-[300px] flex items-center justify-center">
@@ -80,7 +91,6 @@ const ShowtimeSelection = ({ movieId }: ShowtimeSelectionProps) => {
   return (
     <div className="space-y-8">
 
-      {/* ================= DATE SELECTOR ================= */}
       <div className="p-6 rounded-2xl bg-gradient-to-r from-[#2a0f17] via-[#3a1220] to-[#2a0f17] shadow-lg shadow-pink-900/30">
         <h4 className="text-lg font-semibold mb-4 flex items-center gap-2 text-white">
           <Calendar size={22} className="text-pink-400" />
@@ -117,7 +127,6 @@ const ShowtimeSelection = ({ movieId }: ShowtimeSelectionProps) => {
         </div>
       </div>
 
-      {/* ================= TIME SELECTOR ================= */}
       {selectedDateKey && (
         <>
           {selectedShowtimes.length > 0 ? (
@@ -133,13 +142,14 @@ const ShowtimeSelection = ({ movieId }: ShowtimeSelectionProps) => {
                     hour: "2-digit",
                     minute: "2-digit",
                   });
-
                   const isSelected = selectedTime === st.startTime;
-
                   return (
                     <button
-                      key={st.id}
-                      onClick={() => setSelectedTime(st.startTime)}
+                     key={st.id}
+                      onClick={() => {
+                        setSelectedTime(st.startTime);
+                        handSelectShowtime(st);
+                      }}
                       className={`px-3 py-2 rounded-lg text-center transition-all ${
                         isSelected
                           ? "bg-gradient-to-br from-pink-600 to-rose-600 text-white shadow-md shadow-pink-500/40 scale-105"
@@ -156,7 +166,7 @@ const ShowtimeSelection = ({ movieId }: ShowtimeSelectionProps) => {
               </div>
 
               {selectedTime && (
-                <button className="mt-4 w-full flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-pink-600 to-rose-600 font-bold shadow-lg shadow-pink-600/40 hover:scale-[1.02] transition">
+                <button onClick={()=>{goToBooking()}} className="mt-4 w-full flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-pink-600 to-rose-600 font-bold shadow-lg shadow-pink-600/40 hover:scale-[1.02] transition">
                   Book Now
                   <ChevronRight size={20} />
                 </button>

@@ -8,6 +8,7 @@ import ShowtimeSelection from '../../components/movie/ShowtimeSelection';
 export default function DetailMovie() {
   const { id } = useParams<{ id: string }>();
   const movieId = id ? Number(id) : null;
+
   const [movie, setMovie] = useState<Movie | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -167,7 +168,7 @@ export default function DetailMovie() {
     {movieId !== null && (
       <div className="min-h-screen flex justify-center items-start">
         <div className="w-full max-w-5xl px-4">
-          <ShowtimeSelection movieId={movieId} />
+          <ShowtimeSelection movieId={movieId} movieName={movie.title} movieTime={movie.durationMinutes} />
         </div>
       </div>
     )}

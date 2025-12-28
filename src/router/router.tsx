@@ -5,6 +5,7 @@ import AuthLayout from "../layout/AuthLayout";
 import LoginPage from "../pages/loginPage";
 import BookingPage from "../pages/bookingPage";
 import DetailMovie from "../pages/moviePage/detailMovie";
+import Checkout from "../pages/bookingPage/checkout";
 
 const router = createBrowserRouter([
     {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
             {
                 path: "booking/:id",
                 element: <BookingPage />,
+            },
+             {
+                path: "checkout",
+                element: <Checkout />,
             },
             
         ],

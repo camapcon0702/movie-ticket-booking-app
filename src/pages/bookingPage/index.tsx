@@ -4,25 +4,33 @@ import { SeatGrid } from "../../components/booking/SeatGrid";
 import {useSeatSelection, useRenderSeat, formatVND } from "../../hooks/booking/useSeatSelection";
 import { ChevronRight, Film } from "lucide-react";
 import {fetchSeatsByShowtimeId} from "../../services/showtime";
-import { useParams } from "react-router-dom";
-import { createBooking } from "../../services/booking";
+import { useParams,useNavigate } from "react-router-dom";
+
 const seatsPerRow = 4;
 const BookingPage = () => {
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const showtimeId = id ? Number(id) : null;
   const [seatData, setSeatData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const {  bookedSeats } = useRenderSeat(seatData);
+  const { bookedSeats } = useRenderSeat(seatData);
   const {selectedSeats, toggleSeat, totalPrice, selectedSeatLabels } = useSeatSelection();
   
   const handleCheckout = () => {
     try {
-      createBooking({
-        showtimeId: showtimeId!,
-        seatId: selectedSeats.map(seat => seat.id),
-        orders: [],
-      });
+    if (selectedSeats.length === 0 || !showtimeId) return;
+    const bookingStr = localStorage.getItem('Booking');
+    const booking = bookingStr ? JSON.parse(bookingStr) : null;
+  
+    const pendingBooking = {
+      selectedSeats,
+      movieName : booking.movieName,
+      showTime : booking.showTime
+    }
+    
+    localStorage.setItem('PendingBooking', JSON.stringify(pendingBooking));
+    navigate('/checkout');
     } catch (err) { }
   }
 
@@ -46,6 +54,7 @@ const BookingPage = () => {
     }
     loadSeats();
   }, [showtimeId]);
+  
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black">

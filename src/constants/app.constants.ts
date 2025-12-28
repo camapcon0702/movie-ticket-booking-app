@@ -22,6 +22,12 @@ export const API_CONFIG = {
             GET_BY_MOVIE: (id: number | string) => `api/v1.0/showtime/movie/${id}`,
             GET_SEATS: (id: number | string) => `api/v1.0/showtime/${id}/seat`,
         },
+        FOOD:{
+            GET_ALL: "/api/v1.0/foods",
+        },
+        VOUCHER:{
+            GET_ALL: "/api/v1.0/vouchers",
+        },
         BOOKING :{
             CREATE: "/api/v1.0/bookings",
         }
