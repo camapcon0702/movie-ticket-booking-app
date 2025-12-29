@@ -10,7 +10,7 @@ const getSeatStyle = (status: SeatStatus): string => {
   
     switch (status) {
       case 'selected':
-        return `${baseStyle} bg-pink-500 border-pink-400 scale-110 shadow-lg shadow-pink-500/30`;
+        return `${baseStyle} bg-[#F84565] border-pink-400 scale-110 shadow-lg shadow-[#F84565]`;
       case 'booked':
         return `${baseStyle} cursor-not-allowed`;
        case "vip":

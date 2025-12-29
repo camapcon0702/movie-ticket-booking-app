@@ -30,6 +30,8 @@ export const API_CONFIG = {
         },
         BOOKING :{
             CREATE: "/api/v1.0/bookings",
+            CREATE_PAYMENT : (idbooking: number | string) => `/api/booking/${idbooking}/momo`,
+            GET_ALL: "/api/v1.0/bookings"
         }
      
     },

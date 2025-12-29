@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Film, Minus, Plus } from "lucide-react";
-import { formatVND } from "../../hooks/booking/useSeatSelection";
+import {  Minus, Plus } from "lucide-react";
 import { fetchAllFoods } from "../../services/food";
 import type { FoodResponse } from '../../types/response/FoodRespones';
 import type { FoodOrderItem } from '../../hooks/food/useFoodOrder';
+import { formatVND } from '../../utils/formatters';
 
 interface FoodGridProps {
   orderedFoods: Map<number, FoodOrderItem>;
@@ -57,7 +57,7 @@ const FoodGrid = ({ orderedFoods, updateFoodOrder }: FoodGridProps) => {
                   <h3 className="font-semibold text-sm">
                     {food.name}
                   </h3>
-                  <p className="text-pink-500 font-bold text-sm">
+                  <p className="text-[#F84565]font-bold text-sm">
                     {formatVND(food.price)}
                   </p>
                 </div>
@@ -80,7 +80,7 @@ const FoodGrid = ({ orderedFoods, updateFoodOrder }: FoodGridProps) => {
                     onClick={() =>
                       updateFoodOrder(food, quantity + 1)
                     }
-                    className="w-7 h-7 bg-pink-500 rounded"
+                    className="w-7 h-7 bg-[#F84565] rounded"
                   >
                     <Plus size={14} />
                   </button>

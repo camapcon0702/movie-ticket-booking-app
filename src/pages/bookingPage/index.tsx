@@ -22,11 +22,12 @@ const BookingPage = () => {
     if (selectedSeats.length === 0 || !showtimeId) return;
     const bookingStr = localStorage.getItem('Booking');
     const booking = bookingStr ? JSON.parse(bookingStr) : null;
-  
+ 
     const pendingBooking = {
       selectedSeats,
       movieName : booking.movieName,
-      showTime : booking.showTime
+      showTime : booking.showTime,
+      movieTime : booking.movieTime
     }
     
     localStorage.setItem('PendingBooking', JSON.stringify(pendingBooking));
@@ -93,22 +94,22 @@ const BookingPage = () => {
             <div className="mb-12">
               <div className="relative h-20 flex items-center justify-center">
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-full max-w-4xl">
-                    <div 
-                      className="h-1 rounded-full" 
-                      style={{
-                        background: 'linear-gradient(to right, transparent, rgb(236, 72, 153), transparent)'
-                      }}
-                    />
-                    <div 
-                      className="h-16" 
-                      style={{
-                        background: 'linear-gradient(to bottom, rgba(236, 72, 153, 0.2), transparent)',
-                        borderBottomLeftRadius: '100%',
-                        borderBottomRightRadius: '100%'
-                      }}
-                    />
-                  </div>
+                 <div className="w-full max-w-4xl">
+            <div 
+              className="h-1 rounded-full" 
+              style={{
+                background: 'linear-gradient(to right, transparent, #F84565, transparent)'
+              }}
+            />
+            <div 
+              className="h-16" 
+              style={{
+                background: 'linear-gradient(to bottom, rgba(248, 69, 101, 0.2), transparent)',
+                borderBottomLeftRadius: '100%',
+                borderBottomRightRadius: '100%'
+              }}
+            />
+          </div>
                 </div>
                 <span className="relative text-sm font-semibold text-gray-400 bg-gray-900/80 px-4 py-1 rounded-full">
                   SCREEN SIDE
@@ -154,7 +155,7 @@ const BookingPage = () => {
                 <span className="text-sm text-gray-400">Vip</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-lg bg-pink-500 border-2 border-pink-400" />
+                <div className="w-6 h-6 rounded-lg bg-[#F84565] border-2 border-pink-400" />
                 <span className="text-sm text-gray-400">Selected</span>
               </div>
               <div className="flex items-center gap-2">
@@ -172,7 +173,7 @@ const BookingPage = () => {
             <div className="flex justify-center">
               <button onClick={() => handleCheckout()}
                 disabled={selectedSeats.length === 0}
-                className="group flex items-center gap-3 px-10 py-4 bg-pink-500 rounded-full hover:opacity-90 transition font-bold text-lg shadow-lg shadow-pink-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="group flex items-center gap-3 px-10 py-4 bg-[#F84565] rounded-full hover:opacity-90 transition font-bold text-lg shadow-lg shadow-pink-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <span>Proceed to checkout</span>
                 <ChevronRight className="group-hover:translate-x-1 transition" size={24} />

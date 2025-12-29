@@ -39,7 +39,7 @@ export default function DetailMovie() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-16 h-16 border-4 border-pink-500 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-16 h-16 border-4 border-[#F84565] border-t-transparent rounded-full animate-spin"></div>
           <p className="text-white text-lg font-medium">Đang tải...</p>
         </div>
       </div>
@@ -98,11 +98,11 @@ export default function DetailMovie() {
 
               <div className="space-y-2 text-gray-400">
                 <div className="flex items-center gap-2">
-                  <Calendar className="w-5 h-5 text-pink-500" />
+                  <Calendar className="w-5 h-5 text-[#F84565]" />
                   <span>Release date: {movie.releaseDate}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Clock className="w-5 h-5 text-pink-500" />
+                  <Clock className="w-5 h-5 text-[#F84565]" />
                   <span>Duration: {movie.durationMinutes} minutes</span>
                 </div>
               </div>
@@ -123,7 +123,7 @@ export default function DetailMovie() {
                   href={movie.trailerUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-6 py-3 bg-pink-600 hover:bg-pink-700 rounded-lg font-semibold transition-colors"
+                  className="flex items-center gap-2 px-6 py-3 bg-[#F84565] hover:bg-pink-700 rounded-lg font-semibold transition-colors"
                 >
                   <Play size={20} className="fill-white" />
                   Watch Trailer
@@ -133,7 +133,7 @@ export default function DetailMovie() {
                   onClick={() => setIsLiked(!isLiked)}
                   className={`p-3 rounded-lg transition-colors ${
                     isLiked
-                      ? 'bg-pink-600 hover:bg-pink-700'
+                      ? 'bg-[#F84565] hover:bg-pink-700'
                       : 'bg-white/10 hover:bg-white/20 border border-white/20'
                   }`}
                   aria-label={isLiked ? 'Unlike' : 'Like'}
@@ -150,7 +150,7 @@ export default function DetailMovie() {
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-          <Users className="text-pink-500" />
+          <Users className="text-[#F84565]" />
           Your Favorite Cast
         </h2>
         <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">

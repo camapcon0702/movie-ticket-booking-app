@@ -1,11 +1,10 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   ChevronLeft,
   Ticket,
   Calendar,
   Clock,
   MapPin,
-  Check,
   Film
 } from "lucide-react";
 import {formatVND } from "../../hooks/booking/useSeatSelection";
@@ -16,10 +15,7 @@ import { useFoodOrder } from "../../hooks/food/useFoodOrder";
 import { useCheckout } from "../../hooks/booking/useCheckout";
 import type { Seat } from "../../types/Seat";
 import type { Showtime } from "../../types/Showtime";
-interface Movie {
-  movieName :string;
-  movieTime:number
-} 
+
 const Checkout = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -32,6 +28,9 @@ const Checkout = () => {
   const { subtotal, foodTotal, discount, total, handleCheckout } = 
   useCheckout(mockSeats, orderedFoods, selectedVoucher ?? undefined, mockShowtime);
 
+ const handChangeVoucher = (voucher:VoucherResponse| null) =>{
+    setSelectedVoucher(voucher)
+ }
   useEffect(() => {
     const pendingBookingStr = localStorage.getItem('PendingBooking');
     if (pendingBookingStr) {
@@ -40,7 +39,6 @@ const Checkout = () => {
       setMockShowtime(data.showTime);
       setMovieName(data.movieName);
       setMovieTime(data.movieTime);
-      console.log(data)
     }
     else
       {
@@ -86,13 +84,11 @@ const Checkout = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-          {/* LEFT */}
           <div className="lg:col-span-2 space-y-6">
 
-            {/* THÔNG TIN VÉ */}
             <div className="bg-gray-800 rounded-xl p-6">
               <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <Ticket className="text-pink-500" />
+                <Ticket className="text-[#F84565]" />
                 Thông tin đặt vé
               </h2>
 
@@ -121,7 +117,7 @@ const Checkout = () => {
                   {mockSeats.map(seat => (
                     <span
                       key={seat.id}
-                      className="px-3 py-1 bg-pink-500/20 text-pink-400 rounded-lg text-sm"
+                      className="px-3 py-1 bg-pink-500/20 text-[#F84565] rounded-lg text-sm"
                     >
                       {seat.rowName}{seat.seatNumber}
                       {seat.seatType === "Vip" && " (VIP)"}
@@ -135,15 +131,13 @@ const Checkout = () => {
             orderedFoods={orderedFoods}
             updateFoodOrder={updateFoodOrder}
           />
-
-            {/* VOUCHER */}
+ 
             <VoucherGrid
               selectedVoucher={selectedVoucher}
-              onSelectVoucher={setSelectedVoucher}
+              onSelectVoucher={handChangeVoucher}
             />
           </div>
 
-          {/* RIGHT */}
           <div className="bg-gray-800 rounded-xl p-6 h-fit sticky top-6">
             <h2 className="text-xl font-semibold mb-4">Tổng thanh toán</h2>
 
@@ -169,7 +163,7 @@ const Checkout = () => {
 
               <div className="border-t border-gray-700 pt-3 flex justify-between text-lg font-bold">
                 <span>Tổng</span>
-                <span className="text-pink-500">
+                <span className="text-[#F84565]">
                   {formatVND(total)}
                 </span>
               </div>
@@ -177,7 +171,7 @@ const Checkout = () => {
 
             <button
               onClick={handleCheckout}
-              className="w-full mt-6 py-3 bg-pink-500 rounded-lg font-bold hover:bg-pink-600"
+              className="w-full mt-6 py-3 bg-[#F84565] rounded-lg font-bold hover:bg-pink-600"
             >
               Thanh toán
             </button>

@@ -6,6 +6,7 @@ import LoginPage from "../pages/loginPage";
 import BookingPage from "../pages/bookingPage";
 import DetailMovie from "../pages/moviePage/detailMovie";
 import Checkout from "../pages/bookingPage/checkout";
+import BookingHistory from "../pages/historyPage";
 
 const router = createBrowserRouter([
     {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
                 path: "checkout",
                 element: <Checkout />,
             },
+             {
+                path: "history",
+                element: <BookingHistory />,
+            }
             
         ],
     },

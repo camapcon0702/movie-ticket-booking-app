@@ -22,7 +22,6 @@ const ShowtimeSelection = ({ movieId,movieName,movieTime}: ShowtimeSelectionProp
   }
   const goToBooking =()=>{
      if (!showtimeSelect) return;
-     console.log(movieTime)
       localStorage.setItem('Booking', JSON.stringify({ movieName:movieName, showTime:showtimeSelect, movieTime:movieTime})
     );
       navigate(`/booking/${showtimeSelect.id}`);
@@ -61,8 +60,8 @@ const ShowtimeSelection = ({ movieId,movieName,movieTime}: ShowtimeSelectionProp
     return (
       <div className="min-h-[300px] flex flex-col items-center justify-center">
         <div className="relative">
-          <div className="w-14 h-14 border-4 border-pink-500/30 border-t-pink-500 rounded-full animate-spin" />
-          <Ticket className="absolute inset-0 m-auto w-7 h-7 text-pink-500 animate-pulse" />
+          <div className="w-14 h-14 border-4 bg-[#F84565] hover:bg-[#e63a58] rounded-full animate-spin" />
+          <Ticket className="absolute inset-0 m-auto w-7 h-7 text-[#F84565] animate-pulse" />
         </div>
         <p className="mt-4 text-gray-300">Đang tải suất chiếu...</p>
       </div>
@@ -91,9 +90,9 @@ const ShowtimeSelection = ({ movieId,movieName,movieTime}: ShowtimeSelectionProp
   return (
     <div className="space-y-8">
 
-      <div className="p-6 rounded-2xl bg-gradient-to-r from-[#2a0f17] via-[#3a1220] to-[#2a0f17] shadow-lg shadow-pink-900/30">
+      <div className="p-3 rounded-2xl bg-gradient-to-r from-[#2B0F14] via-[#1F0C10] to-[#0F0709] shadow-lg shadow-pink-900/30">
         <h4 className="text-lg font-semibold mb-4 flex items-center gap-2 text-white">
-          <Calendar size={22} className="text-pink-400" />
+          <Calendar size={22} className="text-[#F84565]" />
           Chọn ngày chiếu
         </h4>
 
@@ -111,8 +110,8 @@ const ShowtimeSelection = ({ movieId,movieName,movieTime}: ShowtimeSelectionProp
                 }}
                 className={`flex-shrink-0 min-w-[80px] px-4 py-3 rounded-xl text-center transition-all ${
                   isSelected
-                    ? "bg-gradient-to-br from-pink-600 to-rose-600 shadow-md shadow-pink-500/40 scale-105"
-                    : "bg-[#1e0f15] border border-pink-900/40 hover:border-pink-500/60"
+                    ? "bg-gradient-to-br bg-[#F84565] hover:bg-[#e63a58] "
+                    : "bg-[#1e0f15] border border-[#F84565] hover:border-pink-500/60"
                 }`}
               >
                 <div className={`text-2xl font-bold ${isSelected ? "text-white" : "text-pink-100"}`}>
@@ -132,7 +131,7 @@ const ShowtimeSelection = ({ movieId,movieName,movieTime}: ShowtimeSelectionProp
           {selectedShowtimes.length > 0 ? (
             <div className="space-y-4">
               <h4 className="text-lg font-semibold flex items-center gap-2 text-gray-200">
-                <Clock size={22} className="text-pink-400" />
+                <Clock size={22} className="text-[#F84565]" />
                 Chọn giờ chiếu
               </h4>
 
@@ -152,8 +151,8 @@ const ShowtimeSelection = ({ movieId,movieName,movieTime}: ShowtimeSelectionProp
                       }}
                       className={`px-3 py-2 rounded-lg text-center transition-all ${
                         isSelected
-                          ? "bg-gradient-to-br from-pink-600 to-rose-600 text-white shadow-md shadow-pink-500/40 scale-105"
-                          : "bg-gray-800/40 text-gray-200 hover:bg-gray-700/60 border border-gray-700/50"
+                          ? "bg-gradient-to-br bg-[#F84565] hover:bg-[#e63a58] text-white shadow-md shadow-pink-500/40 scale-105"
+                          : "bg-gray-800/40 text-gray-200 border border-[#F84565] hover:border-pink-900"
                       }`}
                     >
                       <div className="text-sm font-semibold">{time}</div>

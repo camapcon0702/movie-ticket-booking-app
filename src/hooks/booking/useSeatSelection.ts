@@ -1,10 +1,5 @@
 import { useMemo, useState } from 'react';
 import type { Seat } from '../../types/Seat';
-export const formatVND = (value: number) =>
-  new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
-  }).format(value);
 export const  useSeatSelection = () => {
     const [selectedSeats, setSelectedSeats] = useState<Seat[]>([]);
     
