@@ -7,7 +7,6 @@ import {
   MapPin,
   Film
 } from "lucide-react";
-import {formatVND } from "../../hooks/booking/useSeatSelection";
 import VoucherGrid from "../../components/booking/VoucherGrid";
 import FoodGrid from "../../components/booking/FoodGrid";
 import type { VoucherResponse } from "../../types/response/VoucherRespones";
@@ -15,6 +14,7 @@ import { useFoodOrder } from "../../hooks/food/useFoodOrder";
 import { useCheckout } from "../../hooks/booking/useCheckout";
 import type { Seat } from "../../types/Seat";
 import type { Showtime } from "../../types/Showtime";
+import { formatVND } from "../../utils/formatters";
 
 const Checkout = () => {
   const [loading, setLoading] = useState<boolean>(true);

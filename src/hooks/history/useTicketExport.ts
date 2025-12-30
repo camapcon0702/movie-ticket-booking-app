@@ -1,90 +1,120 @@
-import jsPDF from "jspdf";
-
-
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import QRCode from "qrcode";
 import type { BookingResource } from "../../types/response/BookingRespones";
-import { formatDate, formatTime, formatVND } from "../../utils/formatters";
+import { formatDate, formatTime } from "../../utils/formatters";
 
-export const useExportTicketPDF = () => {
-  const exportTicketPDF = (booking: BookingResource) => {
-    const pdf = new jsPDF({
-      orientation: "portrait",
-      unit: "mm",
-      format: "a4",
-    });
+(pdfMake as any).vfs = (pdfFonts as any).vfs;
 
-    let y = 20;
+export const exportTicketPDF = async (booking:BookingResource) => {
+  const qrDataUrl = await QRCode.toDataURL(
+    `QNT-${booking.id}`,
+    { width: 200 }
+  );
 
-    pdf.setFontSize(18);
-    pdf.text("VÉ XEM PHIM", 105, y, { align: "center" });
+  const docDefinition = {
+    pageSize: {
+      width: 300,
+      height: "auto",
+    },
+    pageMargins: [16, 16, 16, 16],
 
-    y += 10;
-    pdf.setFontSize(11);
-    pdf.text(`Booking #${booking.id}`, 105, y, { align: "center" });
+    content: [
+      {
+        text: "QNT CINEMA",
+        alignment: "center",
+        fontSize: 20,
+        bold: true,
+        color: "#F84565",
+        marginBottom: 4,
+      },
+      {
+        text: "VÉ XEM PHIM",
+        alignment: "center",
+        fontSize: 12,
+        marginBottom: 10,
+      },
 
-    y += 6;
-    pdf.line(20, y, 190, y);
+      {
+        table: {
+          widths: ["*", "*"],
+          body: [
+            [
+              { text: "Phim", bold: true },
+              booking.nameMovie,
+            ],
+            [
+              { text: "Ngày", bold: true },
+             formatDate(booking.startTime),
+            ],
+            [
+              { text: "Giờ", bold: true },
+            formatTime(booking.startTime),
+            ],
+            [
+              { text: "Phòng", bold: true },
+              booking.tickets[0]?.auditoriumName || "N/A",
+            ],
+            [
+              { text: "Ghế", bold: true },
+              booking.tickets.map(t => t.seatName).join(", "),
+            ],
+          ],
+        },
+        layout: "noBorders",
+        marginBottom: 12,
+      },
 
-    y += 10;
-    pdf.setFontSize(14);
-    pdf.text(booking.nameMovie, 20, y);
+      {
+        canvas: [
+          {
+            type: "line",
+            x1: 0,
+            y1: 0,
+            x2: 260,
+            y2: 0,
+            dash: { length: 5 },
+          },
+        ],
+        marginBottom: 10,
+      },
 
-    y += 8;
-    pdf.setFontSize(11);
-    pdf.text(`Ngày chiếu: ${formatDate(booking.startTime)}`, 20, y);
-    pdf.text(`Giờ chiếu: ${formatTime(booking.startTime)}`, 120, y);
+      {
+        columns: [
+          { text: "Tổng tiền", bold: true },
+          {
+            text: booking.total.toLocaleString("vi-VN") + " đ",
+            alignment: "right",
+            bold: true,
+            color: "#F84565",
+          },
+        ],
+        marginBottom: 10,
+      },
 
-    y += 7;
-    pdf.text(
-      `Phòng: ${booking.tickets[0]?.auditoriumName || "N/A"}`,
-      20,
-      y
-    );
+      {
+        image: qrDataUrl,
+        width: 120,
+        alignment: "center",
+        marginBottom: 8,
+      },
+      {
+        text: `Mã vé: #${booking.id}`,
+        alignment: "center",
+        fontSize: 10,
+      },
 
-    y += 10;
-    pdf.setFontSize(13);
-    pdf.text("Ghế:", 20, y);
-
-    y += 6;
-    pdf.setFontSize(11);
-    const seats = booking.tickets.map(t => t.seatName).join(", ");
-    pdf.text(seats, 20, y);
-
-    if (booking.orderedFoods.length > 0) {
-      y += 12;
-      pdf.setFontSize(13);
-      pdf.text("Đồ ăn & Thức uống:", 20, y);
-
-      y += 6;
-      pdf.setFontSize(11);
-      booking.orderedFoods.forEach(food => {
-        pdf.text(
-          `• ${food.foodName} x${food.quantity}`,
-          22,
-          y
-        );
-        y += 6;
-      });
-    }
-
-    y += 8;
-    pdf.line(20, y, 190, y);
-
-    y += 10;
-    pdf.setFontSize(14);
-    pdf.text("Tổng thanh toán:", 20, y);
-    pdf.text(formatVND(booking.total), 190, y, { align: "right" });
-
-    y += 15;
-    pdf.setFontSize(10);
-    pdf.text(
-      "Vui lòng xuất trình vé này khi vào rạp",
-      105,
-      y,
-      { align: "center" }
-    );
-
-    pdf.save(`ticket-booking-${booking.id}.pdf`);
+      {
+        text: "Vui lòng xuất trình vé tại quầy hoặc cổng soát vé",
+        alignment: "center",
+        fontSize: 9,
+        marginTop: 10,
+        color: "#666",
+      },
+    ],
   };
 
-  return { exportTicketPDF };
+  pdfMake.createPdf(docDefinition as any).download(
+  `ticket-${booking.id}.pdf`
+);
 };

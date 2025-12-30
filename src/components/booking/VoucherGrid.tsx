@@ -90,7 +90,6 @@ const VoucherGrid =({ selectedVoucher, onSelectVoucher }: VoucherGridProps)=>{
                     HSD : {formatDate(voucher.expiryDate)}
                   </span>
               
-                
               </div>
               <p className={`text-xs mt-1 ${isDisabled ? 'text-gray-600' : 'text-gray-400'}`}>
                 {voucher.discountPercentage

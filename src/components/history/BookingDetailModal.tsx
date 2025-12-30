@@ -2,148 +2,139 @@ import { Printer, UtensilsCrossed, X } from "lucide-react";
 import type { BookingResource } from "../../types/response/BookingRespones";
 import { getStatusConfig } from "../../utils/bookingStatus";
 import { formatDate, formatTime, formatVND } from "../../utils/formatters";
+import { exportTicketPDF } from "../../hooks/history/useTicketExport";
 
 interface BookingDetailModalProps {
   booking: BookingResource;
   onClose: () => void;
 }
 
-export const BookingDetailModal = ({
-  booking,
-  onClose,
-}: BookingDetailModalProps) => {
+export const BookingDetailModal = ({ booking, onClose }: BookingDetailModalProps) => {
   const statusConfig = getStatusConfig(booking.status);
   const StatusIcon = statusConfig.icon;
 
   return (
     <div
-      className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md px-4 sm:px-6"
       onClick={onClose}
     >
       <div
-        className="bg-gray-800 rounded-2xl w-full max-w-md"
+        className="w-full max-w-lg sm:max-w-md rounded-3xl bg-white shadow-xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between p-4 border-b border-gray-700">
-          <h2 className="text-lg font-bold text-white">Vé xem phim</h2>
-          <div className="flex items-center gap-2">
-          {booking.status =="SUCCESS" && (
-            <button className="flex items-center gap-1.5 px-3 py-1.5 bg-pink-500 hover:bg-pink-600 text-white rounded-lg text-sm">
-                  <Printer size={16} />
-                  Xuất vé
-            </button>)
-              }
-             <button
+        <div className="flex items-center justify-between px-6 py-5 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
+          <h2 className="text-2xl font-bold text-gray-900">Chi tiết đặt vé</h2>
+          <div className="flex items-center gap-3">
+            {booking.status === "SUCCESS" && (
+              <button
+                onClick={() => exportTicketPDF(booking)}
+                className="group flex items-center gap-2 rounded-full bg-gradient-to-r from-[#F84565] to-[#e03e55] px-5 py-2.5 text-sm font-semibold text-white shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-200"
+              >
+                <Printer size={18} className="group-hover:rotate-12 transition-transform" />
+                Xuất vé PDF
+              </button>
+            )}
+            <button
               onClick={onClose}
-              className="text-gray-400 hover:text-white"
+              className="rounded-full p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors"
+              aria-label="Đóng"
             >
-              <X size={20} />
+              <X size={24} />
             </button>
           </div>
         </div>
 
-        <div className="p-4">
-          <div className="bg-gray-900 rounded-xl border border-gray-700 overflow-hidden">
+        <div className="px-6 py-7 space-y-8 bg-gradient-to-b from-white to-gray-50/50">
+          <div className="space-y-4">
+            <h3 className="text-2xl font-extrabold text-gray-900 leading-tight">
+              {booking.nameMovie}
+            </h3>
 
-            <div className="p-4">
-              <h3 className="text-lg font-bold text-white">
-                {booking.nameMovie}
-              </h3>
-
-              <div
-                className={`inline-flex items-center gap-1 px-2 py-0.5 mt-2 rounded-full text-xs font-semibold ${statusConfig.bg} ${statusConfig.color}`}
+            <div className="flex flex-wrap items-center gap-3">
+              <span
+                className={`inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-semibold ${statusConfig.bg} ${statusConfig.color} shadow-sm`}
               >
-                <StatusIcon size={12} />
+                <StatusIcon size={16} />
                 {statusConfig.label}
-              </div>
-
-              <div className="mt-3 flex justify-between text-sm">
-                <span className="text-gray-400">Mã booking</span>
-                <span className="font-bold text-[#F84565]">
-                  #{booking.id}
-                </span>
-              </div>
+              </span>
+              <span className="text-sm text-gray-500">
+                Mã booking: <strong className="text-[#F84565]">#{booking.id}</strong>
+              </span>
             </div>
+          </div>
 
-            <div className="border-t border-dashed border-gray-600 mx-4" />
+          <div className="grid grid-cols-3 gap-4">
+            {[
+              { label: "Ngày", value: formatDate(booking.startTime), icon: "📅" },
+              { label: "Giờ chiếu", value: formatTime(booking.startTime), icon: "🕐" },
+              {
+                label: "Phòng",
+                value: booking.tickets[0]?.auditoriumName || "—",
+                icon: "🎬",
+              },
+            ].map((item) => (
+              <div
+                key={item.label}
+                className="rounded-2xl bg-white border border-gray-100 px-4 py-4 text-center shadow-sm hover:shadow transition-shadow"
+              >
+                <div className="text-sm text-gray-500 mb-1.5">{item.icon}</div>
+                <div className="text-base font-semibold text-gray-800">{item.value}</div>
+                <div className="text-xs text-gray-400 mt-0.5">{item.label}</div>
+              </div>
+            ))}
+          </div>
 
-            <div className="grid grid-cols-3 gap-4 p-4 text-sm">
-              <div>
-                <div className="text-gray-400 text-xs">📅 Ngày</div>
-                <div className="text-white font-semibold">
-                  {formatDate(booking.startTime)}
+          <div>
+            <h4 className="text-base font-semibold text-gray-700 mb-3 flex items-center gap-2">
+              <span className="text-xl">💺</span> Ghế đã chọn
+            </h4>
+            <div className="grid grid-cols-4 sm:grid-cols-5 gap-2.5">
+              {booking.tickets.map((ticket) => (
+                <div
+                  key={ticket.id}
+                  className="rounded-xl bg-[#F84565]/10 border border-[#F84565]/30 px-3 py-2.5 text-center text-sm font-semibold text-[#F84565] shadow-sm"
+                >
+                  {ticket.seatName}
                 </div>
-              </div>
-              <div>
-                <div className="text-gray-400 text-xs">🕐 Giờ</div>
-                <div className="text-white font-semibold">
-                  {formatTime(booking.startTime)}
-                </div>
-              </div>
-              <div>
-                <div className="text-gray-400 text-xs">🎭 Phòng</div>
-                <div className="text-white font-semibold">
-                  {booking.tickets[0]?.auditoriumName || "N/A"}
-                </div>
-              </div>
+              ))}
             </div>
+          </div>
 
-            <div className="px-4 pb-5">
-              <div className="text-gray-400 text-xs mb-2">💺 Ghế</div>
-              <div className="flex flex-wrap gap-2">
-                {booking.tickets.map((ticket) => (
-                  <span
-                    key={ticket.id}
-                    className="px-3 py-1.5 bg-gray-800 rounded-lg text-sm font-semibold text-white"
+          {booking.orderedFoods?.length > 0 && (
+            <div>
+              <h4 className="text-lg font-bold flex items-center gap-2 mb-4 text-gray-800">
+                <UtensilsCrossed size={20} className="text-[#F84565]" />
+                Đồ ăn & Thức uống
+              </h4>
+
+              <div className="space-y-3">
+                {booking.orderedFoods.map((food) => (
+                  <div
+                    key={food.foodId}
+                    className="flex items-center justify-between rounded-2xl bg-white border border-gray-100 px-5 py-4 shadow-sm"
                   >
-                    {ticket.seatName}
-                  </span>
-
+                    <div>
+                      <div className="font-medium text-gray-800">{food.foodName}</div>
+                      <div className="text-sm text-gray-500 mt-0.5">
+                        Số lượng: {food.quantity}
+                      </div>
+                    </div>
+                    <div className="text-base font-bold text-[#F84565]">
+                      x{food.quantity}
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
-            <div className="border-t border-dashed border-gray-600 mx-4" />
-            {booking.orderedFoods.length > 0 && (
-              <div className="p-5">
-                <div className="flex items-center gap-2 mb-4">
-                  <UtensilsCrossed size={22} className="text-[#F84565]" />
-                  <h4 className="text-white font-bold text-base">
-                    Đồ ăn & Thức uống
-                  </h4>
-                </div>
+          )}
+        </div>
 
-                <div className="space-y-3">
-                  {booking.orderedFoods.map((food) => (
-                    <div
-                      key={food.foodId}
-                      className="flex items-center justify-between bg-gray-800 rounded-xl px-4 py-3"
-                    >
-                      <div>
-                        <div className="text-white font-semibold text-sm">
-                          {food.foodName}
-                        </div>
-                        <div className="text-gray-400 text-xs mt-1">
-                          Số lượng: {food.quantity}
-                        </div>
-                      </div>
-
-                      <div className="text-[#F84565] font-bold text-base">
-                        x{food.quantity}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <div className="bg-pink-500/10 border-t border-[#F84565] p-4 flex justify-between items-center">
-              <span className="text-white font-bold text-base">
-                Tổng thanh toán
-              </span>
-              <span className="text-xl font-extrabold text-[#F84565]">
-                {formatVND(booking.total)}
-              </span>
-            </div>
+        <div className="px-6 py-6 bg-gradient-to-r from-[#F84565]/5 to-[#F84565]/10 border-t border-[#F84565]/20">
+          <div className="flex items-center justify-between">
+            <span className="text-lg font-semibold text-gray-700">Tổng thanh toán</span>
+            <span className="text-3xl font-extrabold text-[#F84565] tracking-tight">
+              {formatVND(booking.total)}
+            </span>
           </div>
         </div>
       </div>

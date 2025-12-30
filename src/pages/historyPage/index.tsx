@@ -56,17 +56,19 @@ const BookingHistory = () => {
           ))}
         </div>
 
-        {bookings.length === 0 ? (
-          <p className="text-gray-400">Không có booking nào</p>
-        ) : (
-          bookings.map(b => (
-            <BookingCard
-              key={b.id}
-              booking={b}
-              onClick={() => setSelectedBooking(b)}
-            />
-          ))
-        )}
+     <div className="flex flex-col gap-4 relative z-20">
+      {bookings.length === 0 ? (
+        <p className="text-gray-400">Không có booking nào</p>
+      ) : (
+        bookings.map(b => (
+          <BookingCard 
+            key={b.id}
+            booking={b}
+            onClick={() => setSelectedBooking(b)}
+          />
+        ))
+      )}
+    </div>
       </div>
 
       {selectedBooking && (

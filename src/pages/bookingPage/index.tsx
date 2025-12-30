@@ -1,10 +1,11 @@
 import React from "react";
 import { useEffect, useState } from 'react';
 import { SeatGrid } from "../../components/booking/SeatGrid";
-import {useSeatSelection, useRenderSeat, formatVND } from "../../hooks/booking/useSeatSelection";
+import {useSeatSelection, useRenderSeat } from "../../hooks/booking/useSeatSelection";
 import { ChevronRight, Film } from "lucide-react";
 import {fetchSeatsByShowtimeId} from "../../services/showtime";
 import { useParams,useNavigate } from "react-router-dom";
+import { formatVND } from "../../utils/formatters";
 
 const seatsPerRow = 4;
 const BookingPage = () => {

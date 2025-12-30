@@ -13,7 +13,16 @@ export const BookingCard= ({ booking, onClick }:BookingCardProps) =>{
     return (
     <button
       onClick={onClick}
-      className="w-full mb-3 bg-gray-800 rounded-xl p-4 hover:bg-gray-750 transition-colors text-left "
+      className=" w-full
+      bg-gray-800
+      rounded-xl
+      p-4
+      border border-gray-700
+      shadow-md
+      hover:bg-gray-750
+      hover:shadow-lg
+      transition
+      text-left "
     >
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1">
