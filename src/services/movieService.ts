@@ -7,3 +7,8 @@ export const fetchMovieById = async (id: number | string): Promise<Movie> => {
     const response = await apiClient.get<ApiResponse<Movie>>(API_CONFIG.ENDPOINTS.MOVIE.GET_BY_ID(id));
     return response.data.data;
 }
+
+export const fetchALLMovie = async (): Promise<Movie[]> => {
+    const response = await apiClient.get<ApiResponse<Movie[]>>(API_CONFIG.ENDPOINTS.MOVIE.GET_ALL);
+    return response.data.data;
+}

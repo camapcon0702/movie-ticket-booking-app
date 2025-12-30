@@ -2,18 +2,19 @@ import { useEffect, useState } from 'react';
 import { Heart, Play, Star, Calendar, Clock, Film, Users } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import type { Movie } from '../../types/Movie';
-import { fetchMovieById } from '../../services/movieService';
+import { fetchALLMovie, fetchMovieById } from '../../services/movieService';
 import ShowtimeSelection from '../../components/movie/ShowtimeSelection';
+import { NowShowing } from '../homePage/NowShowing';
 
 export default function DetailMovie() {
   const { id } = useParams<{ id: string }>();
   const movieId = id ? Number(id) : null;
-
   const [movie, setMovie] = useState<Movie | null>(null);
+  const [movies,setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isLiked, setIsLiked] = useState(false);
-
+ 
   useEffect(() => {
     if (!movieId) {
       setError('Không tìm thấy ID phim');
@@ -35,6 +36,22 @@ export default function DetailMovie() {
     loadMovie();
   }, [movieId]);
 
+   useEffect(() => {
+       const loadHome = async () => {
+         try {
+           setLoading(true);
+           setError(null);
+           const data = await fetchALLMovie();
+           setMovies(data);
+         } catch (err: any) {
+           setError(err.message || 'Không tải được thông tin phim');
+         } finally {
+           setLoading(false);
+         }
+       };
+       loadHome();
+     }, []);
+    
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black">
@@ -166,12 +183,16 @@ export default function DetailMovie() {
         </div>
       </div>
     {movieId !== null && (
-      <div className="min-h-screen flex justify-center items-start">
+      <div className=" flex justify-center items-start">
         <div className="w-full max-w-5xl px-4">
           <ShowtimeSelection movieId={movieId} movieName={movie.title} movieTime={movie.durationMinutes} />
         </div>
       </div>
     )}
+
+      <NowShowing movies={movies} />
+      
     </div>
   );
+
 }
