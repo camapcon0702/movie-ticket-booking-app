@@ -205,7 +205,15 @@ const BoardsComponent = () => {
                         <Outlet />
                     </Content>
                 </Layout> */}
+
+            <main className="flex-1  mt-16 overflow-y-auto min-h-[calc(100vh-64px)]">
+                <Outlet />
+            </main>
+     
+                  {/* Footer */}
+            
         </Layout>
+        
         // </ProtectedRoute>
     );
 };

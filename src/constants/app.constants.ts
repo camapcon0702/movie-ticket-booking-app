@@ -13,6 +13,27 @@ export const API_CONFIG = {
             PROFILE: "/user-service/v1/profile",
             UPDATE_PROFILE: "/user-service/v1/profile/update",
         },
+        MOVIE:{
+            GET_BY_ID: (id: number | string) => `api/v1.0/movies/${id}`, 
+            GET_ALL: "/movie-service/v1/movies",
+        },
+        SHOWTIME:{
+            GET_BY_ID: (id: number | string) => `api/v1.0/showtime/${id}`, 
+            GET_BY_MOVIE: (id: number | string) => `api/v1.0/showtime/movie/${id}`,
+            GET_SEATS: (id: number | string) => `api/v1.0/showtime/${id}/seat`,
+        },
+        FOOD:{
+            GET_ALL: "/api/v1.0/foods",
+        },
+        VOUCHER:{
+            GET_ALL: "/api/v1.0/vouchers",
+        },
+        BOOKING :{
+            CREATE: "/api/v1.0/bookings",
+            CREATE_PAYMENT : (idbooking: number | string) => `/api/booking/${idbooking}/momo`,
+            GET_ALL: "/api/v1.0/bookings"
+        }
+     
     },
 } as const;
 
