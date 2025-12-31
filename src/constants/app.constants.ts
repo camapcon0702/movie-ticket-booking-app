@@ -15,7 +15,7 @@ export const API_CONFIG = {
         },
         MOVIE:{
             GET_BY_ID: (id: number | string) => `api/v1.0/movies/${id}`, 
-            GET_ALL: "/movie-service/v1/movies",
+            GET_ALL: "/api/v1.0/movies",
         },
         SHOWTIME:{
             GET_BY_ID: (id: number | string) => `api/v1.0/showtime/${id}`, 
