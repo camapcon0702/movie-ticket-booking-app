@@ -50,6 +50,7 @@ export const STORAGE_KEYS = {
     THEME: "theme",
     LANGUAGE: "language",
     REMEMBER_EMAIL: "remember_email",
+    TOKEN: "access_token",
 } as const;
 
 export const ROUTES = {
