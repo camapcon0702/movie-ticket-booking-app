@@ -1,9 +1,11 @@
+import { createPortal } from "react-dom";
 import { Printer, UtensilsCrossed, X } from "lucide-react";
 import type { BookingResource } from "../../types/response/BookingRespones";
 import { getStatusConfig } from "../../utils/bookingStatus";
 import { formatDate, formatTime, formatVND } from "../../utils/formatters";
 import { exportTicketPDF } from "../../hooks/history/useTicketExport";
-
+import { useBookingHistory } from "../../hooks/history/useBookingHistory";
+import { handleCreatePayment } from "../../services/payment.helper";
 interface BookingDetailModalProps {
   booking: BookingResource;
   onClose: () => void;
@@ -12,10 +14,10 @@ interface BookingDetailModalProps {
 export const BookingDetailModal = ({ booking, onClose }: BookingDetailModalProps) => {
   const statusConfig = getStatusConfig(booking.status);
   const StatusIcon = statusConfig.icon;
-
-  return (
+  const { canRepay } = useBookingHistory();
+  return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md px-4 sm:px-6"
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-md px-4 sm:px-6"
       onClick={onClose}
     >
       <div
@@ -137,7 +139,23 @@ export const BookingDetailModal = ({ booking, onClose }: BookingDetailModalProps
             </span>
           </div>
         </div>
+
+        <div>
+      {canRepay (booking) && (
+      <button
+        onClick={() => {
+          handleCreatePayment(booking.id)
+        }}
+        className="
+          absolute bottom-4 right-4 px-3 py-1 text-sm rounded-lg bg-[#F84565] text-white hover:opacity-90
+        "
+      >
+        Thanh toán lại
+      </button>
+    )}
+        </div>
       </div>
-    </div>
+    </div>,
+     document.body
   );
 };

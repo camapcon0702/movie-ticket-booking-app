@@ -14,7 +14,7 @@ import { useFoodOrder } from "../../hooks/food/useFoodOrder";
 import { useCheckout } from "../../hooks/booking/useCheckout";
 import type { Seat } from "../../types/Seat";
 import type { Showtime } from "../../types/Showtime";
-import { formatVND } from "../../utils/formatters";
+import { formatDate, formatTime, formatVND } from "../../utils/formatters";
 
 const Checkout = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -99,15 +99,21 @@ const Checkout = () => {
               <div className="grid grid-cols-2 gap-3 text-sm text-gray-400">
                 <div className="flex gap-2">
                   <MapPin size={16} />
-               
                 </div>
                 <div className="flex gap-2">
                   <Calendar size={16} />
-                  {mockShowtime?.startTime}
+               {mockShowtime ? (
+                <>
+                  {formatDate(mockShowtime.startTime)} : {formatTime(mockShowtime.startTime)}
+                </>
+              ) : (
+                <span>--/-- : --:--</span>
+              )}
                 </div>
+
                 <div className="flex gap-2">
                   <Clock size={16} />
-                  {movieTime}
+                  {movieTime} Phút
                 </div>
               </div>
 

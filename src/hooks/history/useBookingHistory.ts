@@ -14,7 +14,10 @@ export const useBookingHistory = () =>{
         setLoading(true);
         setError(null);
         const response = await fetchAllBooking()
-        setBookings(response);
+        const sortBookings = [...response].sort(
+          (a,b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        setBookings(sortBookings);
         await new Promise(resolve => setTimeout(resolve, 800));
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Có lỗi xảy ra');
@@ -31,11 +34,24 @@ export const useBookingHistory = () =>{
         ? bookings
         : bookings.filter(b => b.status === filter)
 
+  const PAYMENT_TIMEOUT_MINUTES = 15;
+
+  const canRepay = (booking : BookingResource) => {
+    if (booking.status !== 'PENDING') return false;
+
+    const createdTime = new Date(booking.createdAt).getTime()
+    const now = Date.now();
+    const diffMinutes = (now - createdTime) / (1000 * 60);
+
+    return diffMinutes <= PAYMENT_TIMEOUT_MINUTES;
+  }
   return {
     bookings: filteredBookings,
     loading,
     error,
     filter,
-    setFilter
+    canRepay,
+    setFilter,
+    
   };
 }

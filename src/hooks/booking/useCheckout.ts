@@ -2,8 +2,10 @@ import { useMemo } from "react";
 import type { VoucherResponse } from "../../types/response/VoucherRespones";
 import type { FoodOrderItem } from "../food/useFoodOrder";
 import type { Seat } from "../../types/Seat";
+
+import { createBooking } from "../../services/booking";
 import type { CreateBookingRequest } from "../../types/request/BookingRequest";
-import { createBooking, createPayment } from "../../services/booking";
+import { handleCreatePayment } from "../../services/payment.helper";
 
 export const useCheckout = (
   mockSeats: Seat[],
@@ -59,14 +61,9 @@ export const useCheckout = (
       if (!bookingId) {
         throw new Error("Booking ID not found");
       }
-
-      const payment = await createPayment(bookingId);
-
-      if (!payment.success || !payment.payUrl) {
-        throw new Error(payment.message || "Payment failed");
-      }
-
-      window.location.href = payment.payUrl;
+      localStorage.removeItem('Booking');
+      localStorage.removeItem('PendingBooking');
+      await handleCreatePayment(bookingId);
 
     } catch (error) {
       console.error("Checkout failed:", error);
@@ -75,3 +72,4 @@ export const useCheckout = (
 
   return { subtotal, foodTotal, discount, total, handleCheckout };
 };
+

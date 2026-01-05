@@ -11,7 +11,8 @@ export interface BookingResource {
   id: number;                 
   total: number;              
   nameMovie: string;
-  startTime: string;         
+  startTime: string;  
+  createdAt:string;       
   status: BookingStatus;      
   tickets: TicketResource[];
   orderedFoods: OrderFoodResource[];

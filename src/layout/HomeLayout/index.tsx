@@ -159,7 +159,7 @@ const BoardsComponent = () => {
             height: "100vh",
             width: "100wh",
         }}>
-            <Header className="header-nav">
+            <Header className="header-nav z-40" >
                 <Row
                     align="middle"
                     justify="space-between"
