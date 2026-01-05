@@ -8,7 +8,7 @@ const apiClient = axios.create({
 });
 
 apiClient.interceptors.request.use(config => {
-  const token ="eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTc2NzYyMjQwMCwiZXhwIjoxNzY3NzA4ODAwfQ.mjfNvn1EWpg8930sjPbgSG04LDuwvjUTrhVrjxAhGE4jsgE-YVxsy8Lk71CN1hte";
+  const token = window.localStorage.getItem("accessToken");;
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
