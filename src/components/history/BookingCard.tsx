@@ -40,11 +40,11 @@ export const BookingCard= ({ booking, onClick }:BookingCardProps) =>{
       <div className="grid grid-cols-2 gap-2 text-sm text-gray-400 mb-3">
         <div className="flex items-center gap-2">
           <Calendar size={16} />
-          <span>{formatDate (booking.startTime)}</span>
+          <span>{formatDate (booking.createdAt)}</span>
         </div>
         <div className="flex items-center gap-2">
           <Clock size={16} />
-          <span>{formatTime(booking.startTime)}</span>
+          <span>{formatTime(booking.createdAt)}</span>
         </div>
       </div>
 

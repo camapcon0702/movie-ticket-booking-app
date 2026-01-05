@@ -26,7 +26,7 @@ const SeatGrid = ({
 
   const getSeatStatus = (seat: Seat): SeatStatus => {
     if (selectedSeats.some(s => s.id === seat.id)) return "selected";
-    if (bookedSeats.includes(seat)) return "booked";
+    if (bookedSeats.some(s => s.id === seat.id)) return "booked";
     if (seat.seatType === "Vip") return "vip";
     return "available";
   };
@@ -44,7 +44,7 @@ const SeatGrid = ({
               {rowName}
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex gap-3">
               {sortedSeats.map(seat => {
                 const isAisle = seat.seatNumber === 9; 
 
@@ -52,6 +52,7 @@ const SeatGrid = ({
                   <React.Fragment key={seat.id}>
                     {isAisle && <div className="w-4" />}
                     <SeatItem
+                      key ={seat.id}
                       status={getSeatStatus(seat)}
                       onClick={() => onSeatClick(seat)}
                     />

@@ -14,8 +14,15 @@ const BookingHistory = () => {
     filter,
     setFilter
   } = useBookingHistory();
-
+  const [page,setPage] = useState(0);
+  const pageSize = 5;
   const [selectedBooking, setSelectedBooking] = useState<BookingResource | null>(null);
+  const totalPages = Math.ceil(bookings.length / pageSize);
+
+  const pageBooking = bookings.slice (
+    page * pageSize,
+    page * pageSize + pageSize
+  )
 
   if (loading) {
     return (
@@ -57,10 +64,10 @@ const BookingHistory = () => {
         </div>
 
      <div className="flex flex-col gap-4 relative z-20">
-      {bookings.length === 0 ? (
+      {pageBooking.length === 0 ? (
         <p className="text-gray-400">Không có booking nào</p>
       ) : (
-        bookings.map(b => (
+        pageBooking.map(b => (
           <BookingCard 
             key={b.id}
             booking={b}
@@ -77,7 +84,33 @@ const BookingHistory = () => {
           onClose={() => setSelectedBooking(null)}
         />
       )}
+
+      {totalPages > 1 && (
+      <div className="flex justify-center items-center gap-2 mt-6">
+        <button
+          disabled={page === 0}
+          onClick={() => setPage(p => p - 1)}
+          className="px-3 py-1 rounded bg-gray-800 text-gray-300 disabled:opacity-50"
+        >
+          Prev
+        </button>
+
+        <span className="text-gray-400">
+          {page + 1} / {totalPages}
+        </span>
+
+        <button
+          disabled={page + 1 >= totalPages}
+          onClick={() => setPage(p => p + 1)}
+          className="px-3 py-1 rounded bg-gray-800 text-gray-300 disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
+    )}
+
     </div>
+
   );
 };
 
